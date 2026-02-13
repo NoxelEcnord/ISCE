@@ -1,0 +1,3 @@
+[2026-02-12T12:03:14.580Z] [ERROR] Post-connection setup error:
+Error: Timed Out
+    at /home/bard/Desktop/BWM-XMD-GO/node_modules/@whiskeysockets/baileys/lib/Utils/generics.js:152:32

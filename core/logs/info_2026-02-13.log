@@ -1,0 +1,25 @@
+[2026-02-13T21:22:14.851Z] [INFO] Server Running on Port: 5000
+[2026-02-13T21:46:15.899Z] [INFO] Server Running on Port: 5000
+[2026-02-13T21:52:38.453Z] [INFO] Server Running on Port: 5000
+[2026-02-13T21:58:16.108Z] [INFO] Server Running on Port: 5000
+[2026-02-13T22:05:27.221Z] [INFO] Server Running on Port: 5000
+[2026-02-13T22:12:36.878Z] [INFO] Server Running on Port: 5000
+[2026-02-13T22:16:27.890Z] [INFO] [OWNER] Executing: campaigninit
+[2026-02-13T22:23:59.937Z] [INFO] Executing: addgroup from 德里克
+[2026-02-13T22:28:08.898Z] [INFO] [OWNER] Executing: ping
+[2026-02-13T22:29:44.975Z] [INFO] [OWNER] Executing: campaigninit
+[2026-02-13T22:31:15.797Z] [INFO] Server Running on Port: 5000
+[2026-02-13T22:36:36.801Z] [INFO] Server Running on Port: 5000
+[2026-02-13T22:39:48.112Z] [INFO] [OWNER] Executing: ping
+[2026-02-13T22:47:12.745Z] [INFO] Server Running on Port: 5000
+[2026-02-13T22:48:48.738Z] [INFO] Server Running on Port: 5000
+[2026-02-13T22:50:36.122Z] [INFO] [OWNER] Executing: campaigninit
+[2026-02-13T22:50:42.029Z] [INFO] [OWNER] Executing: campaigninit
+[2026-02-13T22:50:47.194Z] [INFO] [OWNER] Executing: campaigninit
+[2026-02-13T22:50:52.636Z] [INFO] [OWNER] Executing: ping
+[2026-02-13T22:51:19.557Z] [INFO] [OWNER] Executing: ping
+[2026-02-13T22:51:23.859Z] [INFO] [OWNER] Executing: menu
+[2026-02-13T22:54:56.475Z] [INFO] Server Running on Port: 5000
+[2026-02-13T23:12:56.221Z] [INFO] Server Running on Port: 5000
+[2026-02-13T23:15:04.776Z] [INFO] [OWNER] Executing: campaigninit
+[2026-02-13T23:15:27.721Z] [INFO] [OWNER] Executing: campaigninit

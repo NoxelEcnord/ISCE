@@ -1,0 +1,242 @@
+
+{
+  "name": "ISCE-BOT",
+  "description": "This is a simple whatsapp bot built with nodejs to make your WhatsApp enjoyable",
+  "keywords": [
+    "bot",
+    "whatsapp",
+    "ISCE-BOT",
+    "whatsapp-stickers",
+    "anime",
+    "whatsapp-bot",
+    "whatsapp-sticker-bot",
+    "whatsapp-botto",
+    "baileys",
+    "baileys-md",
+    "md-bot"
+  ],
+  "website": "https://github.com/Bwmxmd254/ISCE-BOT-GO#readme",
+  "repository": "https://github.com/Bwmxmd254/ISCE-BOT-GO.git",
+  "logo": "https://i.imgur.com/dAtHp2k.jpeg",
+  "success_url": "/",
+  "env": {
+    "SESSION": {
+      "description": "Add your session id here",
+      "required": true
+    },
+    "OWNER_NUMBER": {
+      "description": "Put any phone numbers you want to be bot owner without + or spaces. Ex: 2547123456797",
+      "required": false
+    },
+    "DATABASE_URL": {
+      "description": "PostgreSQL database URL (optional, uses SQLite if not set)",
+      "required": false
+    },
+    "BOT_NAME": {
+      "description": "Your bot name",
+      "value": "ISCE-BOT",
+      "required": false
+    },
+    "PREFIX": {
+      "description": "Command prefix",
+      "value": ".",
+      "required": false
+    },
+    "MODE": {
+      "description": "Bot mode: public or private",
+      "value": "public",
+      "required": false
+    },
+    "PACKNAME": {
+      "description": "Sticker pack name",
+      "value": "ISCE-BOT",
+      "required": false
+    },
+    "TIMEZONE": {
+      "description": "Timezone for the bot",
+      "value": "Africa/Nairobi",
+      "required": false
+    },
+    "AUTHOR": {
+      "description": "Bot author name",
+      "value": "ecnord",
+      "required": false
+    },
+    "DEVICE_MODE": {
+      "description": "Device mode: iPhone (plain text) or Android (full features with buttons)",
+      "value": "Android",
+      "required": false
+    },
+    "ANTI_CALL": {
+      "description": "Anti-call feature: on or off",
+      "value": "on",
+      "required": false
+    },
+    "ANTI_CALL_ACTION": {
+      "description": "Action when call detected: reject or block",
+      "value": "reject",
+      "required": false
+    },
+    "ANTI_CALL_MSG": {
+      "description": "Message to send when rejecting calls",
+      "value": "Call me later",
+      "required": false
+    },
+    "ANTI_DELETE": {
+      "description": "Anti-delete feature: on or off",
+      "value": "on",
+      "required": false
+    },
+    "ANTI_LINK": {
+      "description": "Anti-link feature: off, warn, delete, or remove",
+      "value": "off",
+      "required": false
+    },
+    "WARN_LIMIT": {
+      "description": "Number of warnings before removal (for warn mode)",
+      "value": "3",
+      "required": false
+    },
+    "ANTI_TAG": {
+      "description": "Anti-tag/status-mention feature: off, warn, delete, or remove",
+      "value": "off",
+      "required": false
+    },
+    "AUTO_READ": {
+      "description": "Auto-read messages: on or off",
+      "value": "off",
+      "required": false
+    },
+    "AUTO_BIO": {
+      "description": "Auto-bio feature: on or off",
+      "value": "off",
+      "required": false
+    },
+    "AUTO_BIO_MSG": {
+      "description": "Auto-bio message text",
+      "value": "🐬",
+      "required": false
+    },
+    "AUTO_STATUS_VIEW": {
+      "description": "Auto-view status: on or off",
+      "value": "on",
+      "required": false
+    },
+    "AUTO_STATUS_LIKE": {
+      "description": "Auto-like status: on or off",
+      "value": "off",
+      "required": false
+    },
+    "AUTO_STATUS_REPLY": {
+      "description": "Auto-reply to status: on or off",
+      "value": "off",
+      "required": false
+    },
+    "STATUS_REPLY_MSG": {
+      "description": "Auto-reply message for status views",
+      "value": "Nice status! Viewed by ISCE-BOT Bot",
+      "required": false
+    },
+    "STATUS_LIKE_EMOJIS": {
+      "description": "Comma-separated emojis for liking status",
+      "value": "❤️,💜,💙,🤍,💛",
+      "required": false
+    },
+    "CHATBOT": {
+      "description": "Chatbot feature: on or off",
+      "value": "off",
+      "required": false
+    },
+    "CHATBOT_MODE": {
+      "description": "Chatbot mode: private, group, or both",
+      "value": "private",
+      "required": false
+    },
+    "CHATBOT_TRIGGER": {
+      "description": "Trigger word for chatbot",
+      "value": "dm",
+      "required": false
+    },
+    "CHATBOT_RESPONSE": {
+      "description": "Default chatbot response type: text or audio",
+      "value": "text",
+      "required": false
+    },
+    "CHATBOT_VOICE": {
+      "description": "Voice for audio responses (Kimberly, Salli, Joey, etc)",
+      "value": "Kimberly",
+      "required": false
+    },
+    "PRESENCE_PRIVATE": {
+      "description": "Presence in private chats: off, online, typing, or recording",
+      "value": "off",
+      "required": false
+    },
+    "PRESENCE_GROUP": {
+      "description": "Presence in group chats: off, online, typing, or recording",
+      "value": "off",
+      "required": false
+    },
+    "BOT_URL": {
+      "description": "Comma-separated list of menu image/video URLs",
+      "value": "https://on.bwmxmd.co.ke/veksnu.jpg,https://on.bwmxmd.co.ke/ge01u0.jpg,https://on.bwmxmd.co.ke/ztb02d.jpg",
+      "required": false
+    },
+    "MENU_TOP_LEFT": {
+      "description": "Menu top left symbol",
+      "value": "*┌─❖*",
+      "required": false
+    },
+    "MENU_BOT_NAME_LINE": {
+      "description": "Menu bot name line prefix",
+      "value": "*│",
+      "required": false
+    },
+    "MENU_BOTTOM_LEFT": {
+      "description": "Menu bottom left symbol",
+      "value": "*└┬❖*",
+      "required": false
+    },
+    "MENU_GREETING_LINE": {
+      "description": "Menu greeting line prefix",
+      "value": "   *│",
+      "required": false
+    },
+    "MENU_DIVIDER": {
+      "description": "Menu divider line",
+      "value": "   *└────────┈❖*",
+      "required": false
+    },
+    "MENU_USER_LINE": {
+      "description": "Menu user line prefix",
+      "value": "> 🕵️",
+      "required": false
+    },
+    "MENU_DATE_LINE": {
+      "description": "Menu date line prefix",
+      "value": "> 📅",
+      "required": false
+    },
+    "MENU_TIME_LINE": {
+      "description": "Menu time line prefix",
+      "value": "> ⏰",
+      "required": false
+    },
+    "MENU_STATS_LINE": {
+      "description": "Menu stats line prefix",
+      "value": "> ⭐",
+      "required": false
+    },
+    "MENU_BOTTOM_DIVIDER": {
+      "description": "Menu bottom divider",
+      "value": "▬▬▬▬▬▬▬▬▬▬",
+      "required": false
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs.git"
+    }
+  ],
+  "stack": "heroku-24"
+}
