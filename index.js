@@ -1107,6 +1107,18 @@ async function startBwmxmd() {
         wrapClientWithAntiBan(client, 'MAIN');
         BwmLogger.setClientInstance(client);
 
+        // Expose chat data and activity level to plugins
+        client.loadChatData = loadChatData;
+        client.getActivityLevel = (remoteJid, timeframeMs = 60000) => {
+            const now = Date.now();
+            const messages = loadChatData(remoteJid);
+            const recentMessages = messages.filter(m => {
+                const timestamp = (m.messageTimestamp?.low || m.messageTimestamp || 0) * 1000;
+                return (now - timestamp) < timeframeMs;
+            });
+            return recentMessages.length;
+        };
+
         store.bind(client.ev);
 
         client.ev.process(async (events) => {

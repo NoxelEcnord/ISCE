@@ -103,40 +103,67 @@ Thank you 🤝
         'https://files.catbox.moe/hxch25.jpeg'
     ],
 
-    CAMPAIGN_SLOGANS: [
-        "CORAZONE CHEPKOECH BOR TOSHA!",
-        "CORAZONE TOSHA!",
-        "ACTION OVER TALKS!!",
-        "#ActionOverTalks",
-        "#TukoZoneNaCorazone",
-        "Vote Corazone Chepkoech - MBCH.B Year 3",
-        "Principle. Accountability. Advocacy.",
-        "Effective academic representation: Accountability, Advocacy, Informed Decision Making.",
-        "Representing academic interests with clarity, fairness and consistency.",
-        "Dialogue over division, solutions over complaints, progress over promises.",
-        "A principled voice, a reliable bridge, a powerful negotiator.",
-        "Together, let's steer CHS to a new level.",
-        "CORAZONE 002: Action Over Talks! 🚀",
-        "TUKO ZONE NA CORAZONE! 🦅",
-        "The Vision for CHS 2026/2027: CORAZONE CHEPKOECH.",
-        "Unlocking CHS Potential with Corazone Chepkoech! ✨",
-        "Delegate 002: Corazone Chepkoech. Your Vote, Your Future! 🎓",
-        "Academic Excellence & Accountability: Vote Corazone!",
-        "Don't just watch, participate! Support Corazone Chepkoech!",
-        "Corazone Bor - The Bridge Between Students and Administration. 🤝"
-    ],
+    CAMPAIGN_VARIANTS: {
+        SLOGANS: [
+            "CORAZONE CHEPKOECH BOR: Principle. Accountability. Advocacy. 🦅",
+            "Tuko Zone na Corazone! The choice for 002. 🚀",
+            "Action Over Talks!! Corazone for Delegate. 💯",
+            "Effective Representation, Informed Decisions. Vote Bor! 🎓",
+            "Delegate 002: Corazone Chepkoech - Your Reliable Bridge. 🤝",
+            "Clarity, Fairness, Consistency. That's Corazone 002! ✨",
+            "CHS to a new level - Together with Corazone Bor! 🏆",
+            "Dialogue over Division, Progress over Promises. 💪",
+            "MBCH.B Year 3 Excellence: Vote Corazone Chepkoech! 🎓",
+            "Unlocking CHS Potential - Corazone 002 Tosha! 💎"
+        ],
+        CAPTIONS: [
+            "📢 *CAMPAIGN ALERT*: Choose performance over rhetoric. Corazone Bor for 002!",
+            "🎓 *THE VISION*: Together we achieve more. Vote Corazone Chepkoech for Delegate 002!",
+            "🚀 *NEW LEVEL*: Your interest, my priority. Corazone Chepkoech is the answer!",
+            "✨ *TRANSPARENCY*: A principled voice for all students. Support Corazone!",
+            "🔥 *THE VISION*: Advocacy that produces results. Corazone 002 for Delegate!",
+            "💎 *RELIABILITY*: A bridge between administration and students. Vote Bor!",
+            "🌟 *CHS PRIDE*: Let's steer our school to greatness together. #ActionOverTalks",
+            "💪 *BOLDER VOICE*: Corazone Chepkoech - The strength of CHS representation!",
+            "🏆 *DELEGATE 002*: Proven leadership, actionable plans. #TukoZoneNaCorazone",
+            "🤝 *UNITY*: Dialogue, Solutions, Progress. Corazone Chepkoech Bor."
+        ],
+        HASHTAGS: [
+            "#ActionOverTalks", "#TukoZoneNaCorazone", "#Corazone002", "#CHSVote", "#MUSO2026",
+            "#ExcellenceInService", "#Delegate002", "#TeamCorazone", "#CHSElection", "#BorTosha"
+        ],
+        QUOTES: [
+            "\"Effective representation requires more than enthusiasm; it requires accountability.\"",
+            "\"I value dialogue over division and solutions over complaints.\"",
+            "\"My goal is to represent your interests with clarity, fairness, and consistency.\"",
+            "\"Together, let's steer CHS to a new level.\"",
+            "\"A principled voice and a powerful negotiator for the student body.\"",
+            "\"Progress over promises: That is my commitment to you.\"",
+            "\"Action over talks: Our time for real representation is now.\"",
+            "\"Leadership is about advocacy and informed decision making.\"",
+            "\"Building a bridge that connects every student's voice to the administration.\"",
+            "\"CHS deserves a rigourous yet inclusive academic environment.\""
+        ],
+        BANTERS: [
+            "Lmaoo that's a weak point. Corazone is already out here working while you yap. 💀",
+            "Cope harder. 002 is locked for Bor. Corazone to the world! 🚀",
+            "Imagine opposing Corazone in 2026. Couldn't be me. #ActionOverTalks",
+            "Headshot! Corazone's manifesto literally solves that. Read up. 📚",
+            "Zero arguments detected. Only noise. Corazone 002 all the way! 🦅",
+            "Nice try, but Corazone has the administration's ear. What do you have? 👂",
+            "Stay mad. Corazone is the bridge CHS needs. #TukoZoneNaCorazone",
+            "Manifesto check: Corazone's plan is actionable. Yours is just words. 🥱",
+            "Delegate 002 is not for jokes. Choose Corazone Chepkoech. 🎓",
+            "The energy for Corazone is unmatched. Join the winning side or stay behind. 💯"
+        ]
+    },
 
-    CAMPAIGN_CAPTIONS: [
-        "📢 *CAMPAIGN UPDATE*: Action Over Talks!! Let's steer CHS to a new level. 🚀",
-        "🎓 *THE VISION*: Together we achieve more. Vote Corazone Chepkoech for Delegate 002!",
-        "🔥 *TUKO ZONE NA CORAZONE*: Principled voice, reliable bridge. #002TOSHA",
-        "✨ *ACCOUNTABILITY*: Effective representation requires more than enthusiasm. Choose Bor!",
-        "💎 *CHS 2026*: Dialogue over division, solutions over complaints. #ActionOverTalks",
-        "🚀 *LAUNCHING CHS*: A powerful negotiator in the best interest of students. Vote Corazone!",
-        "🌟 *YOUR FUTURE*: Accountability, Advocacy, Progress. Corazone Chepkoech for 002.",
-        "💪 *STRENGTH IN UNITY*: Together, let's steer CHS to a new level. Support Corazone Chepkoech!",
-        "🏆 *PRINCIPLED VOICE*: Representing your interests with clarity and fairness. 002 TOSHA!",
-        "🦅 *THE BRIDGE*: Choose Corazone Bor for effective academic representation. 🤝"
+    MANIFESTO_PARTS: [
+        "*MANIFESTO PART 1:* Effective academic representation requires accountability, advocacy and informed decision making.",
+        "*MANIFESTO PART 2:* My goal is to represent your academic interests with clarity, fairness and consistency.",
+        "*MANIFESTO PART 3:* I value dialogue over division, solutions over complaints and progress over promises.",
+        "*MANIFESTO PART 4:* I commit to being a principled voice and a reliable bridge for the students' body.",
+        "*MANIFESTO PART 5:* Together, let's steer CHS to a new level. Action over talks!"
     ],
 
     SUPABASE_APK: 'https://teugqirxznhfegcwwnzh.supabase.co/storage/v1/object/public/Bwm-xmd-apps/BWM-GIFT-5.5.apk',

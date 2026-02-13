@@ -1,0 +1,38 @@
+[
+  {
+    "key": {
+      "remoteJid": "120363424455388225@newsletter",
+      "fromMe": false,
+      "id": "A52F5D8B9E58263F5856E7DF1FCDC7E5",
+      "server_id": "1685"
+    },
+    "messageTimestamp": 1771026140,
+    "broadcast": false,
+    "message": {
+      "imageMessage": {
+        "url": "https://mmg.whatsapp.net/m1/v/t24/An9pigdGC2uY4HWPHZu--v8g3YcxWpyXfxjvjXRqX-CtCfU-7zfoWrDWmBbSxrKe9suDKTeNyijGyASClLZG7YG_01momW_mZ4QnHV7all-kojEJI1_Vm-da29pX_Id0Vw?ccb=10-5&oh=01_Q5Aa3wGwiEFtHuPwb-wZlBUgTzFfgIvYp5-EnEHEdI_y_W9F4w&oe=69B7112A&_nc_sid=5e03e0&mms3=true",
+        "mimetype": "image/jpeg",
+        "caption": "siapa yg ga di ucapin valentine",
+        "fileSha256": "tHN5RauP+Fpm9G7OWVlxwWtOIl143p2b8GPSFwVeOUg=",
+        "fileLength": "17459",
+        "height": 352,
+        "width": 352,
+        "directPath": "/m1/v/t24/An9pigdGC2uY4HWPHZu--v8g3YcxWpyXfxjvjXRqX-CtCfU-7zfoWrDWmBbSxrKe9suDKTeNyijGyASClLZG7YG_01momW_mZ4QnHV7all-kojEJI1_Vm-da29pX_Id0Vw?ccb=10-5&oh=01_Q5Aa3wGwiEFtHuPwb-wZlBUgTzFfgIvYp5-EnEHEdI_y_W9F4w&oe=69B7112A&_nc_sid=5e03e0&_nc_hot=1771026138",
+        "mediaKeyTimestamp": "1771025980",
+        "jpegThumbnail": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABsbGxscGx4hIR4qLSgtKj04MzM4PV1CR0JHQl2NWGdYWGdYjX2Xe3N7l33gsJycsOD/2c7Z//////////////8BGxsbGxwbHiEhHiotKC0qPTgzMzg9XUJHQkdCXY1YZ1hYZ1iNfZd7c3uXfeCwnJyw4P/Zztn////////////////CABEIAEgASAMBIgACEQEDEQH/xAAwAAACAwEBAAAAAAAAAAAAAAAABAIDBQEGAQADAQEAAAAAAAAAAAAAAAABAgMABP/aAAwDAQACEAMQAAAA6m71oUONgvVFnqv5yHoMh5xJCtoXqsBbVxPVekrxWeoraK5Y4GdvNbOzpV6PA8oW8wS0CvZUxBpe3Tuhtn3Ui05ctMlxJnFwWJFJtaAM6ywI7XAiaGA6EzwD0f/EACQQAAICAQQCAgMBAAAAAAAAAAECAAMRBBIhMRNBFCIFEFIj/9oACAEBAAE/AL+zN3Mr0j3cmJ+PrHc+HT/MfQUsOpqNIaXyOor4g5lw3AGUaYHBmNoAE3GAzJliCwYMu0/jaY4jIVVQZT7Md0Xkw6lILQZ5gItgb1NUm+vPsQA46iEuMFoG2oBHurA+0co3KypSZb9DKtSvUzvQ8RcEcCPpWWnPuV8qMy+r3tiVEnrAlVYEup3Sqhw3UIAXELopIhAIMsGwwEEQzzInGZ5FbowNLrBWhY+pZqXZy361S/XMryTgTxsRPhsTkvKtOFJOeYV2jM1eXqKifDu9Ceer+hHep1I3CKo5IfowlyARYIarzz5oKrNwIujZ9uOpqrbA31MGp1CwOWbAi0DJyTwIhH+gM3dgGUuNhDRRjnMscs6qDL9OEqDgzdP/xAAeEQACAwABBQAAAAAAAAAAAAAAAQIQETESISIyQf/aAAgBAgEBPwCHqORpGXyl2TQ72tvoZhhhj08xk+RRxt6xcKv/xAAeEQEBAAIBBQEAAAAAAAAAAAABAAIRQQMQEiExMv/aAAgBAwEBPwDGMbVnjzEdPxysQtSSJGSmovf2WciB7cfq4vG6mSJq5n5Kjhrt/9k=",
+        "contextInfo": {
+          "forwardingScore": 1,
+          "isForwarded": true,
+          "forwardedNewsletterMessageInfo": {
+            "newsletterJid": "120363402162198869@newsletter",
+            "serverMessageId": 14092,
+            "newsletterName": "ciyel"
+          },
+          "pairedMediaType": "NOT_PAIRED_MEDIA"
+        },
+        "thumbnailDirectPath": "/m1/v/t24/An_HUMPtT_7PwVCzqLqOKM9DPiXNJyvuz8PlKysD_oZQNzeKBBcga_w3gBUWLYFStgwXfRqlHDlrhHJd-H_vFf1wYw8pDExpZZU5OyCVhpfpPS7ob6Gl9Z2AQpbIEpE-KVVuu7dviDKyjqcK9OCnVt8N0Q?ccb=10-5&oh=01_Q5Aa3wFGcpdYY0cLngI5NvKO6xQmNHAleORyrhka-DoxZuWjvQ&oe=69B718E0&_nc_sid=5e03e0",
+        "thumbnailSha256": "7vOSQNJGAY7nWB9UgAPSugO/o0ChobWnQaVPdcVqsw4="
+      }
+    }
+  }
+]
