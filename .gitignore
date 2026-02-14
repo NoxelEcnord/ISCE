@@ -1,1 +1,7 @@
 node_modules
+
+core/logs/
+session/
+tmp/
+database.db
+core/database.sqlite
