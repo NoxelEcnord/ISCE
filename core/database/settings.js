@@ -59,7 +59,7 @@ const SettingsDB = database.define('settings', {
 
 async function initSettingsDB() {
     try {
-        await SettingsDB.sync({ alter: true });
+        await SettingsDB.sync();
         console.log('Settings table ready');
     } catch (error) {
         console.error('Error initializing Settings table:', error);

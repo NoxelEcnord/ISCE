@@ -1002,7 +1002,23 @@ app.post("/xmd/pair", async (req, res) => {
     }
 });
 
-app.listen(PORT, '0.0.0.0', () => BwmLogger.info(`Server Running on Port: ${PORT}`));
+function startServer(port) {
+    const server = app.listen(port, '0.0.0.0', () => {
+        const actualPort = server.address().port;
+        BwmLogger.info(`🔥 ISCE-BOT Server is live on port: ${actualPort}`);
+    });
+
+    server.on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            BwmLogger.warn(`⚠️  Port ${port} is busy. Trying a random available port...`);
+            startServer(0); // 0 lets the OS pick a random free port
+        } else {
+            BwmLogger.error(`❌ Server error: ${err.message}`);
+        }
+    });
+}
+
+startServer(PORT);
 
 const sessionDir = path.join(__dirname, "session");
 
