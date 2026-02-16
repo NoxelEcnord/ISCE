@@ -94,7 +94,8 @@ Thank you 🤝
         "For a better CHS, Vote Corazone Chepkoech! 💯 #MUSODelegate"
     ],
 
-    THEME_SONG_URL: 'https://www.youtube.com/watch?v=VjMZJZdNnBE', // Corazon by Gims
+    THEME_SONG_URL: 'https://www.youtube.com/watch?v=VjMZJZdNnBE', // GIMS - Corazon ft. Lil Wayne & French Montana
+    THEME_SONG_TITLE: '🎵 GIMS - Corazon ft. Lil Wayne & French Montana',
 
     CAMPAIGN_GROUP_KEYWORDS: ['moi', 'first year', 'chs', 'mu', 'delegate'],
 
@@ -114,7 +115,12 @@ Thank you 🤝
             "CHS to a new level - Together with Corazone Bor! 🏆",
             "Dialogue over Division, Progress over Promises. 💪",
             "MBCH.B Year 3 Excellence: Vote Corazone Chepkoech! 🎓",
-            "Unlocking CHS Potential - Corazone 002 Tosha! 💎"
+            "Unlocking CHS Potential - Corazone 002 Tosha! 💎",
+            "WEKA MAWE! Corazone 002 - The Horizon of CHS Leadership! 🌅",
+            "Tuko Zone na Corazone, New Horizon for 002! 🔥",
+            "WEKA MAWE na Corazone! Action Over Talks!! ⚡",
+            "From Vision to Horizon - Corazone Chepkoech Bor! 🎯",
+            "WEKA MAWE! Tuko Zone, Tuko Ready - Corazone 002! 💪"
         ],
         CAPTIONS: [
             "📢 *CAMPAIGN ALERT*: Choose performance over rhetoric. Corazone Bor for 002!",
@@ -130,7 +136,8 @@ Thank you 🤝
         ],
         HASHTAGS: [
             "#ActionOverTalks", "#TukoZoneNaCorazone", "#Corazone002", "#CHSVote", "#MUSO2026",
-            "#ExcellenceInService", "#Delegate002", "#TeamCorazone", "#CHSElection", "#BorTosha"
+            "#ExcellenceInService", "#Delegate002", "#TeamCorazone", "#CHSElection", "#BorTosha",
+            "#WekaMawe", "#CorazonHorizon", "#NewHorizon", "#WekaMaweCorazone", "#TukoReady"
         ],
         QUOTES: [
             "\"Effective representation requires more than enthusiasm; it requires accountability.\"",
@@ -177,6 +184,7 @@ Thank you 🤝
     CATBOX_API: 'https://catbox.moe/user/api.php',
     DEFAULT_PP: 'https://telegra.ph/file/95680cd03e012bb08b9e6.jpg',
     OWNER_PP: 'https://telegra.ph/file/9521e9ee2fdbd0d6f4f1c.jpg',
+    BOT_LOGO: 'https://files.catbox.moe/p4d92g.jpeg', // ISCE Campaign Bot Logo
     SFM_FAVICON: 'https://sfmcompile.club/favicon.ico',
     TENOR_API: (q, key) => `https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(q)}&key=${key}&client_key=bwm-xmd&limit=8&media_filter=gif`,
     TENOR_API_KEY: 'AIzaSyCyouca1_KKy4W_MG1xsPzuku5oa8W358c',

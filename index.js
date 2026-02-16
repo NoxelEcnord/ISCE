@@ -97,7 +97,14 @@ const {
 } = require("./core/lib/antiBan");
 
 const { getSudoNumbers, setSudo, delSudo, isSudo } = require("./core/database/sudo");
-const { getCampaignGroups, getCampaignState, updateCampaignState } = require("./core/database/campaign");
+const {
+    initCampaignDB,
+    getCampaignGroups,
+    getCampaignState,
+    getParticipant,
+    updateActivity
+} = require('./core/database/campaign');
+const { getCampaignSticker } = require('./plugins/campaign');
 const { handleDemolisherBanter } = require("./plugins/banter");
 const { startFlooding, startPromoLoop } = require("./plugins/campaign");
 
@@ -290,7 +297,6 @@ const { initChatbotDB, saveConversation, getConversationHistory, clearConversati
 const { initGroupEventsDB, getGroupEventsSettings } = require('./core/database/groupevents');
 const { initAntiCallDB, getAntiCallSettings } = require('./core/database/anticall');
 const { initSubBotSettingsDB } = require('./core/database/subbotSettings');
-const { initCampaignDB } = require('./core/database/campaign');
 //const { getAutoDownloadStatusSettings, initAutoDownloadStatusDB } = require('./database/autodownloadstatus');
 // Initialize all databases
 async function initializeDatabases() {
@@ -366,14 +372,24 @@ async function getAIResponse(message, userJid) {
             console.error('Gemini API failed, trying Llama...', e.message);
         }
 
-        // Try secondary API: Llama
+        // Try secondary API: Llama (Bk9)
         try {
             const llamaRes = await axios.get(`https://api.bk9.dev/ai/llama?q=${encodeURIComponent(fullMessage)}`, { timeout: 15000 });
-            if (llamaRes.data && llamaRes.data.status && llamaRes.data.BK9) {
-                return llamaRes.data.BK9;
+            if (llamaRes.data && llamaRes.data.status && (llamaRes.data.BK9 || llamaRes.data.result)) {
+                return llamaRes.data.BK9 || llamaRes.data.result;
             }
         } catch (e) {
-            console.error('Llama API failed, trying Keith API fallback...', e.message);
+            console.error('Llama (Bk9) failed, trying Llama (Keith)...', e.message);
+        }
+
+        // Try tertiary API: Llama (Keith)
+        try {
+            const llamaKeithRes = await axios.get(XMD.API.AI.LLAMA(fullMessage), { timeout: 15000 });
+            if (llamaKeithRes.data && (llamaKeithRes.data.status || llamaKeithRes.data.result)) {
+                return llamaKeithRes.data.result || llamaKeithRes.data.BK9;
+            }
+        } catch (e) {
+            console.error('Llama (Keith) API failed, trying Keith AI fallback...', e.message);
         }
 
         // Fallback: Keith API
@@ -1018,7 +1034,7 @@ function startServer(port) {
     });
 }
 
-startServer(PORT);
+// startServer(PORT);
 
 const sessionDir = path.join(__dirname, "session");
 
@@ -2310,14 +2326,80 @@ async function startBwmxmd() {
             if (!isCommandMessage && !ms.key.fromMe && !isNewsletter && from !== 'status@broadcast') {
                 await handleChatbot(client, ms.message, from, sender, isGroup, isSuperUser, ms);
 
-                // Campaign Banter Hook
+                // Campaign Features (Banter & Counter)
                 if (isGroup) {
                     const campaignGroups = await getCampaignGroups();
                     if (campaignGroups.includes(from)) {
-                        // Get last 5 messages for context
+                        // Track activity for smart flooding
+                        await updateActivity(from, sender, false);
+
+                        const state = await getCampaignState();
+                        const participant = await getParticipant(sender);
+                        const isFoe = participant?.type === 'foe';
+
+                        // Counter Mode Features
+                        if (state.counter_mode && isFoe) {
+                            const isMedia = !!(ms.message?.imageMessage || ms.message?.videoMessage || ms.message?.stickerMessage);
+                            const isReaction = !!(ms.message?.reactionMessage);
+                            const isText = !!(text && !isMedia && !isReaction);
+
+                            // 1. Media Counter (2:1 ratio)
+                            if (isMedia) {
+                                console.log(`[COUNTER] Foe ${sender} sent media. Countering...`);
+                                const isFoeSticker = !!ms.message?.stickerMessage;
+
+                                for (let i = 0; i < 2; i++) {
+                                    if (isFoeSticker) {
+                                        const randomImg = XMD.CAMPAIGN_IMAGES[Math.floor(Math.random() * XMD.CAMPAIGN_IMAGES.length)];
+                                        const stickerBuffer = await getCampaignSticker(randomImg);
+                                        if (stickerBuffer) {
+                                            await client.sendMessage(from, { sticker: stickerBuffer }, { quoted: ms });
+                                        }
+                                    } else {
+                                        const randomImg = XMD.CAMPAIGN_IMAGES[Math.floor(Math.random() * XMD.CAMPAIGN_IMAGES.length)];
+                                        const randomSlogan = XMD.CAMPAIGN_VARIANTS.SLOGANS[Math.floor(Math.random() * XMD.CAMPAIGN_VARIANTS.SLOGANS.length)];
+                                        await client.sendMessage(from, {
+                                            image: { url: randomImg },
+                                            caption: `🛡️ *COUNTER ATTACK* ⚔️\n\n${randomSlogan}`,
+                                            contextInfo: { ...XMD.getContextInfo(), mentionedJid: [sender] }
+                                        }, { quoted: ms });
+                                    }
+                                }
+                                // Update activity after counter-attack
+                                await updateActivity(from, client.user.id, true);
+                            }
+
+                            // 2. Reaction Counter (mirror their reaction)
+                            if (isReaction) {
+                                console.log(`[COUNTER] Foe ${sender} reacted. Counter-reacting...`);
+                                const targetMsg = ms.message.reactionMessage.key;
+                                const counterEmojis = ['🔥', '💯', '⚔️', '🦅', '💪', '🚀', '👑'];
+                                const randomEmoji = counterEmojis[Math.floor(Math.random() * counterEmojis.length)];
+
+                                await client.sendMessage(from, {
+                                    react: { text: randomEmoji, key: targetMsg }
+                                });
+                            }
+
+                            // 3. Text Counter (aggressive response)
+                            if (isText && Math.random() < 0.4) { // 40% chance to counter text
+                                console.log(`[COUNTER] Foe ${sender} sent text. Counter-bantering...`);
+                                const aggressiveBanters = XMD.CAMPAIGN_VARIANTS.BANTERS;
+                                const randomBanter = aggressiveBanters[Math.floor(Math.random() * aggressiveBanters.length)];
+
+                                await client.sendMessage(from, {
+                                    text: `${randomBanter}\n\n_#TukoZoneNaCorazone 🦅_`
+                                }, { quoted: ms });
+                                // Update activity after counter-attack
+                                await updateActivity(from, client.user.id, true);
+                            }
+                        }
+
+                        // 2. Banter Hook (for non-counter or neutral/pal interactions)
                         const chatData = loadChatData(from);
                         const last5 = chatData.slice(-5);
-                        await handleDemolisherBanter(client, from, sender, text, last5, pushName);
+                        const isMedia = !!(ms.message?.imageMessage || ms.message?.videoMessage || ms.message?.stickerMessage);
+                        await handleDemolisherBanter(client, from, sender, text, last5, pushName, isMedia);
                     }
                 }
             }
@@ -2623,18 +2705,26 @@ async function startBwmxmd() {
 
             if (connection === "open") {
 
-                console.log(chalk.cyanBright(`
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   ██████╗ ██╗    ██╗███╗   ███╗    ██╗  ██╗███╗   ███╗██████╗  ║
-║   ██╔══██╗██║    ██║████╗ ████║    ╚██╗██╔╝████╗ ████║██╔══██╗ ║
-║   ██████╔╝██║ █╗ ██║██╔████╔██║     ╚███╔╝ ██╔████╔██║██║  ██║ ║
-║   ██╔══██╗██║███╗██║██║╚██╔╝██║     ██╔██╗ ██║╚██╔╝██║██║  ██║ ║
-║   ██████╔╝╚███╔███╔╝██║ ╚═╝ ██║    ██╔╝ ██╗██║ ╚═╝ ██║██████╔╝ ║
-║   ╚═════╝  ╚══╝╚══╝ ╚═╝     ╚═╝    ╚═╝  ╚═╝╚═╝     ╚═╝╚═════╝  ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
+                // ISCE-BOT Branded Startup Banner
+                console.log(chalk.cyan(`
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   ██╗███████╗ ██████╗███████╗    ██████╗  ██████╗ ████████╗  ║
+║   ██║██╔════╝██╔════╝██╔════╝    ██╔══██╗██╔═══██╗╚══██╔══╝  ║
+║   ██║███████╗██║     █████╗█████╗██████╔╝██║   ██║   ██║     ║
+║   ██║╚════██║██║     ██╔══╝╚════╝██╔══██╗██║   ██║   ██║     ║
+║   ██║███████║╚██████╗███████╗    ██████╔╝╚██████╔╝   ██║     ║
+║   ╚═╝╚══════╝ ╚═════╝╚══════╝    ╚═════╝  ╚═════╝    ╚═╝     ║
+║                                                               ║
+║              ${chalk.yellow('CORAZONE 002 CAMPAIGN ENGINE')}                  ║
+║                  ${chalk.green('Action Over Talks!!')}                       ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
 `));
+
+                console.log(chalk.magenta('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'));
+                console.log(chalk.white.bold('  🚀 INITIALIZING CAMPAIGN SYSTEMS...'));
+                console.log(chalk.magenta('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'));
 
                 console.log(chalk.greenBright('┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓'));
                 console.log(chalk.greenBright('┃') + chalk.yellowBright(' ⚡ ') + chalk.cyanBright('CONNECTION ESTABLISHED SUCCESSFULLY') + chalk.yellowBright(' ⚡        ') + chalk.greenBright('┃'));
