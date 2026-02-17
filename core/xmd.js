@@ -157,11 +157,11 @@ Thank you 🤝
     },
 
     MANIFESTO_PARTS: [
-        "*MANIFESTO PART 1:* Effective academic representation requires accountability, advocacy and informed decision making.",
-        "*MANIFESTO PART 2:* My goal is to represent your academic interests with clarity, fairness and consistency.",
-        "*MANIFESTO PART 3:* I value dialogue over division, solutions over complaints and progress over promises.",
-        "*MANIFESTO PART 4:* I commit to being a principled voice and a reliable bridge for the students' body.",
-        "*MANIFESTO PART 5:* Together, let's steer CHS to a new level. Action over talks!"
+        "Effective academic representation requires accountability, advocacy and informed decision making.",
+        "My goal is to represent your academic interests with clarity, fairness and consistency.",
+        "I value dialogue over division, solutions over complaints and progress over promises.",
+        "I commit to being a principled voice and a reliable bridge for the students' body.",
+        "Together, let's steer CHS to a new level. Action over talks!"
     ],
 
     SUPABASE_APK: 'https://teugqirxznhfegcwwnzh.supabase.co/storage/v1/object/public/Bwm-xmd-apps/BWM-GIFT-5.5.apk',
