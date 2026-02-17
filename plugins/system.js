@@ -177,7 +177,7 @@ bwmxmd({
   category: "System",
   filename: __filename
 }, async (from, client, conText) => {
-  const { react, quoted, ms } = conText;
+  const { react, quoted, ms, reply } = conText;
   const start = performance.now();
 
   // Calculate speed first

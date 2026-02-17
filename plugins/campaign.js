@@ -652,7 +652,11 @@ bwmxmd({
         }
 
         const fileName = `cim_${Date.now()}.jpg`;
-        const filePath = path.join(__dirname, '../../assets/campaign/images', fileName);
+        const dirPath = path.join(__dirname, '../../assets/campaign/images');
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath, { recursive: true });
+        }
+        const filePath = path.join(dirPath, fileName);
 
         fs.writeFileSync(filePath, buffer);
         react("🖼️");
@@ -683,7 +687,11 @@ bwmxmd({
         }
 
         const fileName = `cst_${Date.now()}.webp`;
-        const filePath = path.join(__dirname, '../../assets/campaign/stickers', fileName);
+        const dirPath = path.join(__dirname, '../../assets/campaign/stickers');
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath, { recursive: true });
+        }
+        const filePath = path.join(dirPath, fileName);
 
         fs.writeFileSync(filePath, buffer);
         react("🗒️");
@@ -734,7 +742,7 @@ bwmxmd({
         floodInterval = null;
         promoInterval = null;
     }
-    
+
     reply(`✅ *Template Loaded: ${q}*\n\nBanter: ${config.banter_level}\nSpeed: ${config.ispeed}\nFlooding: ${config.is_flooding ? 'ON' : 'OFF'}`);
 });
 
