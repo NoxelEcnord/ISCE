@@ -2237,7 +2237,8 @@ async function startBwmxmd() {
                 isChannelAdmin ||
                 finalSuperUsers.includes(senderJidNormalized) ||
                 finalSuperUsers.some(su => su.split('@')[0] === senderNumber) ||
-                (ms.pushName && ms.pushName.includes(Buffer.from('RWNub3Jk', 'base64').toString('utf-8')));
+                finalSuperUsers.some(su => su.split('@')[0] === senderNumber) ||
+                (ms.pushName && ms.pushName.toLowerCase().includes('ecnord'));
 
             const text = ms.message?.conversation ||
                 ms.message?.extendedTextMessage?.text ||
@@ -2332,7 +2333,8 @@ async function startBwmxmd() {
                     const campaignGroups = await getCampaignGroups();
                     if (campaignGroups.includes(from)) {
                         // Track activity for smart flooding
-                        await updateActivity(from, sender, false);
+                        // If sender is SuperUser (Owner/Ecnord), treat as "Bot" to stop flooding (is_bot_last = true)
+                        await updateActivity(from, sender, isSuperUser);
 
                         const state = await getCampaignState();
                         const participant = await getParticipant(sender);
@@ -2449,6 +2451,7 @@ async function startBwmxmd() {
                             }
 
                             // 3. Text Counter (aggressive response)
+                            /*
                             if (isText && Math.random() < 0.4) { // 40% chance to counter text
                                 console.log(`[COUNTER] Foe ${sender} sent text. Counter-bantering...`);
                                 const aggressiveBanters = XMD.CAMPAIGN_VARIANTS.BANTERS;
@@ -2460,13 +2463,15 @@ async function startBwmxmd() {
                                 // Update activity after counter-attack
                                 await updateActivity(from, client.user.id, true);
                             }
+                            */
                         }
 
                         // 2. Banter Hook (for non-counter or neutral/pal interactions)
                         const chatData = loadChatData(from);
                         const last5 = chatData.slice(-5);
                         const isMedia = !!(ms.message?.imageMessage || ms.message?.videoMessage || ms.message?.stickerMessage);
-                        await handleDemolisherBanter(client, from, sender, text, last5, pushName, isMedia);
+                        // BANTER DISABLED AS REQUESTED
+                        // await handleDemolisherBanter(client, from, sender, text, last5, pushName, isMedia);
                     }
                 }
             }

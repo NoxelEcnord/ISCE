@@ -354,9 +354,23 @@ async function startPromoLoop(client) {
                 const randomImg = XMD.CAMPAIGN_IMAGES[Math.floor(Math.random() * XMD.CAMPAIGN_IMAGES.length)];
                 const randomManifesto = XMD.MANIFESTO_PARTS[Math.floor(Math.random() * XMD.MANIFESTO_PARTS.length)];
 
+                // Natural intros for student-to-student vibe
+                const intros = [
+                    "Hey guys, real talk from Corazone:",
+                    "Action over talks. Here's the plan:",
+                    "Why Corazone is the right choice:",
+                    "Think about this:",
+                    "A leader who listens. Corazone's promise:",
+                    "Straight facts:",
+                    "No cap, this is what we need:",
+                    "For a better CHS:",
+                    "Let's make it happen. The vision:"
+                ];
+                const intro = intros[Math.floor(Math.random() * intros.length)];
+
                 await client.sendMessage(jid, {
                     image: { url: randomImg },
-                    caption: `📜 *OFFICIAL MANIFESTO*\n\n${randomManifesto}\n\n*Vote Corazone Chepkoech Bor for Delegate 002!*`,
+                    caption: `${intro}\n\n"${randomManifesto}"\n\n🦅 #WekaMawe #TukoZoneNaCorazone`,
                     contextInfo: {
                         externalAdReply: {
                             title: "CORAZONE CHEPKOECH BOR",

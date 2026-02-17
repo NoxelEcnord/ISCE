@@ -187,27 +187,33 @@ bwmxmd({
   // React instead of text
   react("🏓");
 
-  // Send Corazon song as PTT
-  const audioUrl = await fetchCorazonSong();
+  try {
+    // Send Corazon song as PTT
+    const audioUrl = await fetchCorazonSong();
 
-  if (audioUrl) {
-    await client.sendMessage(from, {
-      audio: { url: audioUrl },
-      mimetype: 'audio/mpeg',
-      ptt: true,
-      contextInfo: {
-        externalAdReply: {
-          title: `⚡ 𝐈𝐒𝐂𝐄 𝐒𝐩𝐞𝐞𝐝: ${speed}𝐦𝐬`,
-          body: "𝐌𝐨𝐝𝐞: 𝐂𝐡𝐢𝐥𝐮𝐱 | 𝐏𝐫𝐞𝐦𝐢𝐮𝐦 🦅",
-          mediaType: 2,
-          thumbnailUrl: XMD.LOGO,
-          sourceUrl: XMD.REPO,
-          mediaUrl: XMD.REPO
+    if (audioUrl) {
+      await client.sendMessage(from, {
+        audio: { url: audioUrl },
+        mimetype: 'audio/mpeg',
+        ptt: true,
+        contextInfo: {
+          externalAdReply: {
+            title: `⚡ 𝐈𝐒𝐂𝐄 𝐒𝐩𝐞𝐞𝐝: ${speed}𝐦𝐬`,
+            body: "𝐌𝐨𝐝𝐞: 𝐂𝐡𝐢𝐥𝐮𝐱 | 𝐏𝐫𝐞𝐦𝐢𝐮𝐦 🦅",
+            mediaType: 2,
+            thumbnailUrl: XMD.LOGO,
+            sourceUrl: XMD.REPO,
+            mediaUrl: XMD.REPO
+          }
         }
-      }
-    }, { quoted: ms });
-  } else {
-    react("❌"); // Or minimal text
+      }, { quoted: ms });
+    } else {
+      // Fallback if audio fails
+      reply(`⚡ *Speed:* ${speed}ms`);
+    }
+  } catch (e) {
+    console.error("Ping audio error:", e);
+    reply(`⚡ *Speed:* ${speed}ms`);
   }
 });
 
