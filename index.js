@@ -2489,7 +2489,6 @@ async function startBwmxmd() {
                         const chatData = loadChatData(from);
                         const last5 = chatData.slice(-5);
                         const isMedia = !!(ms.message?.imageMessage || ms.message?.videoMessage || ms.message?.stickerMessage);
-                        const isMedia = !!(ms.message?.imageMessage || ms.message?.videoMessage || ms.message?.stickerMessage);
 
                         if (state.banter_level > 0) {
                             await handleDemolisherBanter(client, from, sender, text, last5, pushName, isMedia);
