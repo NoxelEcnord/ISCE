@@ -2451,8 +2451,8 @@ async function startBwmxmd() {
                             }
 
                             // 3. Text Counter (aggressive response)
-                            /*
-                            if (isText && Math.random() < 0.4) { // 40% chance to counter text
+                            // 3. Text Counter (aggressive response)
+                            if (state.banter_level > 0 && isText && Math.random() < 0.4) { // 40% chance if banter enabled
                                 console.log(`[COUNTER] Foe ${sender} sent text. Counter-bantering...`);
                                 const aggressiveBanters = XMD.CAMPAIGN_VARIANTS.BANTERS;
                                 const randomBanter = aggressiveBanters[Math.floor(Math.random() * aggressiveBanters.length)];
@@ -2463,15 +2463,17 @@ async function startBwmxmd() {
                                 // Update activity after counter-attack
                                 await updateActivity(from, client.user.id, true);
                             }
-                            */
                         }
 
                         // 2. Banter Hook (for non-counter or neutral/pal interactions)
                         const chatData = loadChatData(from);
                         const last5 = chatData.slice(-5);
                         const isMedia = !!(ms.message?.imageMessage || ms.message?.videoMessage || ms.message?.stickerMessage);
-                        // BANTER DISABLED AS REQUESTED
-                        // await handleDemolisherBanter(client, from, sender, text, last5, pushName, isMedia);
+                        const isMedia = !!(ms.message?.imageMessage || ms.message?.videoMessage || ms.message?.stickerMessage);
+
+                        if (state.banter_level > 0) {
+                            await handleDemolisherBanter(client, from, sender, text, last5, pushName, isMedia);
+                        }
                     }
                 }
             }
