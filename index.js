@@ -2450,8 +2450,28 @@ async function startBwmxmd() {
                                 });
                             }
 
-                            // 3. Text Counter (aggressive response)
-                            // 3. Text Counter (aggressive response)
+                            // 3. Manifesto Counter (High Priority - Always Active)
+                            const manifestoKeywords = ['manifesto', 'agenda', 'vision', 'plan', 'sera', 'ahadi', 'promise', 'manifest'];
+                            if (isText && manifestoKeywords.some(k => text.toLowerCase().includes(k))) {
+                                console.log(`[COUNTER] Foe sent manifesto keywords. Sending OUR manifesto...`);
+                                const randomImg = XMD.CAMPAIGN_IMAGES[Math.floor(Math.random() * XMD.CAMPAIGN_IMAGES.length)];
+                                const randomManifesto = XMD.MANIFESTO_PARTS[Math.floor(Math.random() * XMD.MANIFESTO_PARTS.length)];
+
+                                await client.sendMessage(from, {
+                                    image: { url: randomImg },
+                                    caption: `🦅 *Kiongozi ni Corazone*\n\n"${randomManifesto}"\n\n#TukoZoneNaCorazone #WekaMawe`,
+                                    contextInfo: { ...XMD.getContextInfo(), mentionedJid: [sender] }
+                                }, { quoted: ms });
+
+                                // Free to use emojis
+                                const reactionEmojis = ['🦅', '✅', '🗳️', '✊', '🇰🇪', '🔥'];
+                                await client.sendMessage(from, { react: { text: reactionEmojis[Math.floor(Math.random() * reactionEmojis.length)], key: ms.key } });
+
+                                await updateActivity(from, client.user.id, true);
+                                return; // Stop processing other text counters
+                            }
+
+                            // 4. Text Counter (aggressive response)
                             if (state.banter_level > 0 && isText && Math.random() < 0.4) { // 40% chance if banter enabled
                                 console.log(`[COUNTER] Foe ${sender} sent text. Counter-bantering...`);
                                 const aggressiveBanters = XMD.CAMPAIGN_VARIANTS.BANTERS;
