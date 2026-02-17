@@ -28,13 +28,16 @@ const getContactMsg = (contactName, sender) =>
     XMD.getContactMsg(contactName, sender);
 
 const randomMedia = () => {
-    if (!MEDIA_URLS || MEDIA_URLS.length === 0) return null;
-    const url = MEDIA_URLS[Math.floor(Math.random() * MEDIA_URLS.length)];
-    if (typeof url === "string") {
-        const trimmed = url.trim();
-        return trimmed.startsWith("http") ? trimmed : null;
-    }
-    return null;
+    // Priority: Local ISCE.png
+    const localPath = path.join(__dirname, "../core/public/isce.png");
+    if (fs.existsSync(localPath)) return localPath;
+
+    // Fallback: URLs
+    const combinedUrls = [...(MEDIA_URLS || []), ...(XMD.CAMPAIGN_IMAGES || [])];
+    const validUrls = combinedUrls.filter(url => typeof url === "string" && url.trim().startsWith("http"));
+    if (validUrls.length === 0) return XMD.BOT_LOGO;
+
+    return validUrls[Math.floor(Math.random() * validUrls.length)];
 };
 
 const getRandomAudio = async () => {
@@ -131,6 +134,7 @@ const categories = {
     "11. 🔧 SYSTEM MENU": ["system"],
     "12. 📚 EDUCATION MENU": ["education"],
     "13. 🔗 SHORTENER MENU": ["shortener"],
+    "14. ⚔️ CAMPAIGN MENU": ["campaign"],
 };
 
 bwmxmd(
@@ -170,40 +174,38 @@ bwmxmd(
             else if (hour >= 12 && hour < 18) greeting = "☀️ Good Afternoon 😊";
             else if (hour >= 18 && hour < 22) greeting = "🌆 Good Evening 🤠";
 
-            const menuOptions = `
-*╭──────────────┈❖*
-*│  『 📂 ᴄᴀᴛᴇɢᴏʀɪᴇs 』*
-*╰──────────────┈❖*
- 
-*⒈* 🌐 ᴏᴜʀ ᴡᴇʙ ᴀᴘᴘ
-*⒉* 🎵 ʀᴀɴᴅᴏᴍ sᴏɴɢ
-*⒊* 📢 ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ
-*⒋* 🤖 ᴀɪ ᴛᴏᴏʟs
-*⒌* 🎨 ᴇᴘʜᴏᴛᴏ ᴍᴀɢɪᴄ
-*⒍* 📥 ᴅᴏᴡɴʟᴏᴀᴅᴇʀ
-*⒎* 👨‍👨‍👦‍👦 ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇʀ
-*⒏* ⚙️ ʙᴏᴛ sᴇᴛᴛɪɴɢs
-*⒐* 😂 ғᴜɴ & ɢᴀᴍᴇs
-*⒑* 🌍 ɢᴇɴᴇʀᴀʟ ᴜᴛɪʟ
-*⒒* ⚽ sᴘᴏʀᴛ sᴛᴀᴛs
-*⒓* 🔍 sᴛᴀʟᴋᴇʀ ᴛᴏᴏʟs
-*⒔* 🖼️ sᴛɪᴄᴋᴇʀ ʜᴜʙ
+            const menuOptions = `╭───『 🌟 𝐈𝐒𝐂𝐄 𝐌𝐄𝐍𝐔 』───╮
+│
+│ 𝟏. 🌐 ᴏᴜʀ ᴡᴇʙ ᴀᴘᴘ
+│ 𝟐. 🎵 ʀᴀɴᴅᴏᴍ sᴏɴɢ
+│ 𝟑. 📢 ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ
+│ 𝟒. 🤖 ᴀɪ ᴛᴏᴏʟs
+│ 𝟓. 🎨 ᴇᴘʜᴏᴛᴏ ᴍᴀɢɪᴄ
+│ 𝟔. 📥 ᴅᴏᴡɴʟᴏᴀᴅᴇʀ
+│ 𝟕. 👨‍👨‍👦‍👦 ɢʀᴏᴜᴘ ᴍᴀɴᴀɢᴇʀ
+│ 𝟖. ⚙️ ʙᴏᴛ sᴇᴛᴛɪɴɢs
+│ 𝟗. 😂 ғᴜɴ & ɢᴀᴍᴇs
+│ 𝟏𝟎. 🌍 ɢᴇɴᴇʀᴀʟ ᴜᴛɪʟ
+│ 𝟏𝟏. ⚽ sᴘᴏʀᴛ sᴛᴀᴛs
+│ 𝟏𝟐. 🔍 sᴛᴀʟᴋᴇʀ ᴛᴏᴏʟs
+│ 𝟏𝟑. 🖼️ sᴛɪᴄᴋᴇʀ ʜᴜʙ
+│ 𝟏𝟒. 🔧 sʏsᴛᴇᴍ ᴛᴏᴏʟs
+│ 𝟏𝟓. 📚 ᴇᴅᴜᴄᴀᴛɪᴏɴ
+│ 𝟏𝟔. 🔗 ᴜʀʟ sʜᴏʀᴛᴇɴᴇʀ
+│ 𝟏𝟕. ⚔️ 𝐂𝐀𝐌𝐏𝐀𝐈𝐆𝐍 𝐇𝐐
+│
+╰─────────────────────╯
+💡 𝐑𝐞𝐩𝐥𝐲 𝐰𝐢𝐭𝐡 𝐚 𝐧𝐮𝐦𝐛𝐞𝐫 (𝟏-𝟏𝟕)`;
 
-*❯ ʀᴇᴘʟʏ ᴡɪᴛʜ ᴀ ɴᴜᴍʙᴇʀ (1-13)*
-*❯ ᴛᴏ ᴠɪᴇᴡ ᴄᴏᴍᴍᴀɴᴅs*
-`;
-
-            const menuHeader = `${MENU_TOP_LEFT}
-${MENU_BOT_NAME_LINE}*${BOT_NAME}*
-${MENU_BOTTOM_LEFT}
- ┌──『 *ɪɴᴛᴇʟʟɪɢᴇɴᴛ sʏɴᴛʜᴇᴛɪᴄ ᴄᴏᴍᴘᴜᴛɪɴɢ ᴇɴᴛɪᴛʏ* 』
-${MENU_GREETING_LINE}*${greeting}*
-${MENU_DIVIDER}
-${MENU_USER_LINE}${contactName}
-${MENU_DATE_LINE}${date}
-${MENU_TIME_LINE}${time}       
-${MENU_STATS_LINE}${githubStats}       
-${MENU_BOTTOM_DIVIDER}`;
+            const menuHeader = `╭───────────────╮
+│ 🤖 𝐁𝐨𝐭: 𝐈𝐒𝐂𝐄 𝐕𝟐
+│ 👤 𝐎𝐰𝐧𝐞𝐫: 𝐄𝐂𝐍𝐎𝐑𝐃
+│ 📅 𝐃𝐚𝐭𝐞: ${date}
+│ ⌚ 𝐓𝐢𝐦𝐞: ${time} (${s.TZ})
+│ 📊 𝐔𝐬𝐞𝐫𝐬: ${githubStats.users || 1000}
+│ 🚀 𝐌𝐨𝐝𝐞: ${deviceMode === 'iPhone' ? '🍎 iOS' : '🤖 Android'}
+╰───────────────╯
+${greeting}, *${pushName}*! 👋`;
 
             const fullMenuText = `${menuHeader}\n\n${readMore}\n${menuOptions}`;
 
@@ -243,11 +245,13 @@ ${MENU_BOTTOM_DIVIDER}`;
                 }
             } else if (selectedMedia) {
                 try {
+                    const mediaContent = selectedMedia.startsWith("http") ? { url: selectedMedia } : fs.readFileSync(selectedMedia);
+
                     if (selectedMedia.match(/\.(mp4|gif)$/i)) {
                         mainMenuMsg = await client.sendMessage(
                             from,
                             {
-                                video: { url: selectedMedia },
+                                video: mediaContent,
                                 gifPlayback: true,
                                 caption: fullMenuText,
                                 contextInfo: getGlobalContextInfo(),
@@ -258,7 +262,7 @@ ${MENU_BOTTOM_DIVIDER}`;
                         mainMenuMsg = await client.sendMessage(
                             from,
                             {
-                                image: { url: selectedMedia },
+                                image: mediaContent,
                                 caption: fullMenuText,
                                 contextInfo: getGlobalContextInfo(),
                             },
@@ -284,21 +288,22 @@ ${MENU_BOTTOM_DIVIDER}`;
                 );
             }
 
-            // Send Welcome Audio
+            // Send Theme Song (Corazon)
             try {
-                // Using "ICE" instead of "ISCE" for correct pronunciation in TTS
-                const welcomeText = `Hello ${contactName}, I am ICE, the Intelligent Synthetic Computing Entity. How can I assist you today? Enjoy using my advanced services!`;
-                const audioBuffer = await getWelcomeAudio(welcomeText);
-                if (audioBuffer) {
+                const songUrl = await axios.get(XMD.API.DOWNLOAD.AUDIO(XMD.THEME_SONG_URL), { timeout: 30000 })
+                    .then(res => res.data?.result)
+                    .catch(() => null);
+
+                if (songUrl) {
                     await client.sendMessage(from, {
-                        audio: audioBuffer,
-                        mimetype: 'audio/ogg; codecs=opus',
+                        audio: { url: songUrl },
+                        mimetype: 'audio/mpeg',
                         ptt: true,
                         contextInfo: getGlobalContextInfo()
                     }, { quoted: mainMenuMsg || contactMessage });
                 }
             } catch (e) {
-                console.error("Welcome audio send failed:", e);
+                console.error("Theme song send failed:", e.message);
             }
 
             const cleanup = () => {
@@ -308,12 +313,13 @@ ${MENU_BOTTOM_DIVIDER}`;
             const sendMainMenu = async (destChat) => {
                 const selectedMedia = randomMedia();
                 if (selectedMedia) {
+                    const mediaContent = selectedMedia.startsWith("http") ? { url: selectedMedia } : fs.readFileSync(selectedMedia);
                     try {
                         if (selectedMedia.match(/\.(mp4|gif)$/i)) {
                             await client.sendMessage(
                                 destChat,
                                 {
-                                    video: { url: selectedMedia },
+                                    video: mediaContent,
                                     gifPlayback: true,
                                     caption: fullMenuText,
                                     contextInfo: getGlobalContextInfo(),
@@ -324,7 +330,7 @@ ${MENU_BOTTOM_DIVIDER}`;
                             await client.sendMessage(
                                 destChat,
                                 {
-                                    image: { url: selectedMedia },
+                                    image: mediaContent,
                                     caption: fullMenuText,
                                     contextInfo: getGlobalContextInfo(),
                                 },
@@ -378,7 +384,8 @@ ${MENU_BOTTOM_DIVIDER}`;
                     0: '🔄', 1: '🌐', 2: '🎵', 3: '📢',
                     4: '🤖', 5: '🎨', 6: '📥', 7: '👨‍👨‍👦‍👦',
                     8: '⚙️', 9: '😂', 10: '🌍', 11: '⚽',
-                    12: '🔍', 13: '🖼️'
+                    12: '🔍', 13: '🖼️', 14: '🔧', 15: '📚',
+                    16: '🔗', 17: '⚔️'
                 };
 
                 try {
@@ -404,78 +411,25 @@ ${MENU_BOTTOM_DIVIDER}`;
                             );
                             break;
 
+
                         case 2:
+                            // Corazon song logic via API
                             try {
-                                const audioUrl = await getRandomAudio();
+                                const audioUrl = await axios.get(XMD.API.DOWNLOAD.AUDIO(XMD.THEME_SONG_URL), { timeout: 30000 }).then(res => res.data?.result);
+
                                 if (audioUrl) {
-                                    const tempMp3 = path.join("/tmp", `menu_song_${Date.now()}.mp3`);
-
-                                    const audioResponse = await axios({
-                                        method: "GET",
-                                        url: audioUrl,
-                                        responseType: "arraybuffer",
-                                        timeout: 30000,
-                                    });
-
-                                    fs.writeFileSync(tempMp3, Buffer.from(audioResponse.data));
-
-                                    // Try opus conversion, fallback to mp3 if it fails
-                                    let audioToSend;
-                                    let mimeType = "audio/mpeg";
-                                    const tempOgg = path.join("/tmp", `menu_song_${Date.now()}.ogg`);
-
-                                    try {
-                                        await convertToOpus(tempMp3, tempOgg);
-                                        audioToSend = fs.readFileSync(tempOgg);
-                                        mimeType = "audio/ogg; codecs=opus";
-                                    } catch (convErr) {
-                                        console.log("Opus conversion failed, using mp3:", convErr.message);
-                                        audioToSend = fs.readFileSync(tempMp3);
-                                    }
-
-                                    await client.sendMessage(
-                                        destChat,
-                                        {
-                                            audio: audioToSend,
-                                            mimetype: mimeType,
-                                            ptt: mimeType.includes("opus"),
-                                            contextInfo: getGlobalContextInfo(),
-                                        },
-                                        { quoted: contactMessage },
-                                    );
-
-                                    // Cleanup temp files
-                                    try { fs.unlinkSync(tempMp3); } catch (e) { }
-                                    try { fs.unlinkSync(tempOgg); } catch (e) { }
-
-                                    await client.sendMessage(
-                                        destChat,
-                                        {
-                                            text: `🎵 Enjoy your random NCS song!\n\n_Reply *0* to go back to main menu_\n\n▬▬▬▬▬▬▬▬▬▬\n *Visit for more*\n> bwmxmd.co.ke \n\n*Deploy your bot now*\n> pro.bwmxmd.co.ke \n▬▬▬▬▬▬▬▬▬▬`,
-                                            contextInfo: getGlobalContextInfo(),
-                                        },
-                                        { quoted: contactMessage },
-                                    );
+                                    await client.sendMessage(destChat, {
+                                        audio: { url: audioUrl },
+                                        mimetype: 'audio/mpeg',
+                                        ptt: true,
+                                        contextInfo: getGlobalContextInfo()
+                                    }, { quoted: contactMessage });
                                 } else {
-                                    await client.sendMessage(
-                                        destChat,
-                                        {
-                                            text: `🎵 Random song service is temporarily unavailable.\n\nTry using *.play <song name>* command instead!\n\n_Reply *0* to go back to main menu_\n\n▬▬▬▬▬▬▬▬▬▬\n *Visit for more*\n> bwmxmd.co.ke \n\n*Deploy your bot now*\n> pro.bwmxmd.co.ke \n▬▬▬▬▬▬▬▬▬▬`,
-                                            contextInfo: getGlobalContextInfo(),
-                                        },
-                                        { quoted: contactMessage },
-                                    );
+                                    await client.sendMessage(destChat, { react: { text: "❌", key: contactMessage.key } });
                                 }
-                            } catch (audioErr) {
-                                console.error("Menu audio error:", audioErr.message);
-                                await client.sendMessage(
-                                    destChat,
-                                    {
-                                        text: `🎵 Random song service is temporarily unavailable.\n\nTry using *.play <song name>* command instead!\n\n_Reply *0* to go back to main menu_\n\n▬▬▬▬▬▬▬▬▬▬\n *Visit for more*\n> bwmxmd.co.ke \n\n*Deploy your bot now*\n> pro.bwmxmd.co.ke \n▬▬▬▬▬▬▬▬▬▬`,
-                                        contextInfo: getGlobalContextInfo(),
-                                    },
-                                    { quoted: contactMessage },
-                                );
+                            } catch (error) {
+                                console.error("Menu song error:", error);
+                                await client.sendMessage(destChat, { react: { text: "❌", key: contactMessage.key } });
                             }
                             break;
 
@@ -500,6 +454,10 @@ ${MENU_BOTTOM_DIVIDER}`;
                         case 11:
                         case 12:
                         case 13:
+                        case 14:
+                        case 15:
+                        case 16:
+                        case 17:
                             const catIndex = selectedIndex - 4;
                             const categoryNames = Object.keys(categories);
                             const categoryName = categoryNames[catIndex];
@@ -543,7 +501,7 @@ ${MENU_BOTTOM_DIVIDER}`;
                             await client.sendMessage(
                                 destChat,
                                 {
-                                    text: `*❌ Invalid number. Please select between 1-13.*\n\n_Reply *0* to go back to main menu_\n\n▬▬▬▬▬▬▬▬▬▬\n *Visit for more*\n> bwmxmd.co.ke \n\n*Deploy your bot now*\n> pro.bwmxmd.co.ke \n▬▬▬▬▬▬▬▬▬▬`,
+                                    text: `*❌ Invalid number. Please select between 1-17.*\n\n_Reply *0* to go back to main menu_\n\n▬▬▬▬▬▬▬▬▬▬\n *Visit for more*\n> bwmxmd.co.ke \n\n*Deploy your bot now*\n> pro.bwmxmd.co.ke \n▬▬▬▬▬▬▬▬▬▬`,
                                     contextInfo: getGlobalContextInfo(),
                                 },
                                 { quoted: contactMessage },

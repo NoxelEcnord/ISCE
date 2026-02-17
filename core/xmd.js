@@ -106,21 +106,12 @@ Thank you 🤝
 
     CAMPAIGN_VARIANTS: {
         SLOGANS: [
-            "CORAZONE CHEPKOECH BOR: Principle. Accountability. Advocacy. 🦅",
-            "Tuko Zone na Corazone! The choice for 002. 🚀",
-            "Action Over Talks!! Corazone for Delegate. 💯",
-            "Effective Representation, Informed Decisions. Vote Bor! 🎓",
-            "Delegate 002: Corazone Chepkoech - Your Reliable Bridge. 🤝",
-            "Clarity, Fairness, Consistency. That's Corazone 002! ✨",
-            "CHS to a new level - Together with Corazone Bor! 🏆",
-            "Dialogue over Division, Progress over Promises. 💪",
-            "MBCH.B Year 3 Excellence: Vote Corazone Chepkoech! 🎓",
-            "Unlocking CHS Potential - Corazone 002 Tosha! 💎",
-            "WEKA MAWE! Corazone 002 - The Horizon of CHS Leadership! 🌅",
-            "Tuko Zone na Corazone, New Horizon for 002! 🔥",
-            "WEKA MAWE na Corazone! Action Over Talks!! ⚡",
-            "From Vision to Horizon - Corazone Chepkoech Bor! 🎯",
-            "WEKA MAWE! Tuko Zone, Tuko Ready - Corazone 002! 💪"
+            "ActionOverTalks 🦅",
+            "TukoZoneNaCORAZONE 🚀",
+            "Corazone to the horizon 🌄",
+            "WEKAMAWE 💎",
+            "Action Over Talks!! 💯",
+            "WEKA MAWE! Tuko Zone na Corazone! 🦅"
         ],
         CAPTIONS: [
             "📢 *CAMPAIGN ALERT*: Choose performance over rhetoric. Corazone Bor for 002!",
@@ -184,7 +175,7 @@ Thank you 🤝
     CATBOX_API: 'https://catbox.moe/user/api.php',
     DEFAULT_PP: 'https://telegra.ph/file/95680cd03e012bb08b9e6.jpg',
     OWNER_PP: 'https://telegra.ph/file/9521e9ee2fdbd0d6f4f1c.jpg',
-    BOT_LOGO: 'https://files.catbox.moe/p4d92g.jpeg', // ISCE Campaign Bot Logo
+    BOT_LOGO: 'https://files.catbox.moe/rr3rwq.png', // ISCE Campaign Bot Logo
     SFM_FAVICON: 'https://sfmcompile.club/favicon.ico',
     TENOR_API: (q, key) => `https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(q)}&key=${key}&client_key=bwm-xmd&limit=8&media_filter=gif`,
     TENOR_API_KEY: 'AIzaSyCyouca1_KKy4W_MG1xsPzuku5oa8W358c',

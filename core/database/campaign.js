@@ -26,7 +26,7 @@ const CampaignStateDB = database.define('campaign_state', {
     },
     is_flooding: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
+        defaultValue: true // Chilux Smart Default
     },
     sticker_count: {
         type: DataTypes.INTEGER, // 0 for infinite
@@ -34,19 +34,19 @@ const CampaignStateDB = database.define('campaign_state', {
     },
     interval_ms: {
         type: DataTypes.INTEGER,
-        defaultValue: 5000
+        defaultValue: 10000 // Smart loop (10s)
     },
     ispeed: {
         type: DataTypes.STRING, // e.g., "3/4"
-        defaultValue: "3/5"
+        defaultValue: "Auto"
     },
     banter_level: {
         type: DataTypes.INTEGER,
-        defaultValue: 3 // 1-5
+        defaultValue: 0 // 1-5 (Default 0 for defensive)
     },
     counter_mode: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
+        defaultValue: true // Default true for defensive
     }
 }, {
     timestamps: true,
@@ -199,7 +199,7 @@ async function getCampaignState() {
         return state;
     } catch (e) {
         console.error('Error getting campaign state:', e);
-        return { is_flooding: false, sticker_count: 0, interval_ms: 5000, banter_level: 3, counter_mode: false, ispeed: "3/5" };
+        return { is_flooding: false, sticker_count: 0, interval_ms: 0, banter_level: 0, counter_mode: true, ispeed: "0/0" };
     }
 }
 
@@ -345,6 +345,18 @@ async function createDefaultTemplates() {
                 ispeed: '0/0',
                 sticker_count: 0,
                 is_flooding: false
+            }
+        },
+        {
+            name: 'chilux',
+            description: 'Smart Mode - Auto-reply to activity (Pauses if bot last)',
+            config: {
+                banter_level: 3,
+                counter_mode: true,
+                ispeed: 'Auto',
+                sticker_count: 0,
+                is_flooding: true,
+                interval_ms: 10000
             }
         }
     ];

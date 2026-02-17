@@ -55,15 +55,15 @@ bwmxmd({
     category: "campaign",
     filename: __filename
 }, async (from, client, conText) => {
-    const { reply, sender, isGroup } = conText;
-    if (!isGroup) return reply("❌ This command can only be used in groups.");
-    if (!isOwner(conText)) return reply("❌ Only owner can add groups to campaign scope.");
+    const { reply, react, sender, isGroup } = conText;
+    if (!isGroup) return react("❌");
+    if (!isOwner(conText)) return react("❌");
 
     const success = await addCampaignGroup(from, sender);
     if (success) {
-        reply("✅ Group added to campaign scope. ISCE is watching! 🦅");
+        react("👍");
     } else {
-        reply("❌ Failed to add group.");
+        react("❌");
     }
 });
 
@@ -73,15 +73,53 @@ bwmxmd({
     category: "campaign",
     filename: __filename
 }, async (from, client, conText) => {
-    const { reply, isGroup } = conText;
-    if (!isGroup) return reply("❌ This command can only be used in groups.");
-    if (!isOwner(conText)) return reply("❌ Only owner can manage campaign scope.");
+    const { reply, react, isGroup } = conText;
+    if (!isGroup) return react("❌");
+    if (!isOwner(conText)) return react("❌");
 
     const success = await removeCampaignGroup(from);
     if (success) {
-        reply("🗑️ Group removed from campaign scope.");
+        react("👍");
     } else {
-        reply("❌ Failed to remove group.");
+        react("❌");
+    }
+});
+
+// Auto-scan groups for campaign
+bwmxmd({
+    pattern: "autoscan",
+    description: "Auto-add groups with keywords (moi, chs, delegate)",
+    category: "campaign",
+    filename: __filename
+}, async (from, client, conText) => {
+    const { reply, react, sender } = conText;
+    if (!isOwner(conText)) return react("❌");
+
+    try {
+        react("🔍");
+        const groups = await client.groupFetchAllParticipating();
+        const keywords = XMD.CAMPAIGN_GROUP_KEYWORDS || ['moi', 'chs', 'delegate', 'class', '2026', '2027'];
+        let count = 0;
+
+        for (const [jid, metadata] of Object.entries(groups)) {
+            const subject = (metadata.subject || "").toLowerCase();
+            const hasKeyword = keywords.some(k => subject.includes(k.toLowerCase()));
+
+            if (hasKeyword) {
+                const added = await addCampaignGroup(jid, sender);
+                if (added) count++;
+            }
+        }
+
+        if (count > 0) {
+            reply(`scanned and added ${count} form groups; we active.`);
+            react("💯");
+        } else {
+            react("🤷‍♂️");
+        }
+    } catch (e) {
+        console.error(e);
+        react("❌");
     }
 });
 
@@ -92,23 +130,23 @@ bwmxmd({
     category: "campaign",
     filename: __filename
 }, async (from, client, conText) => {
-    const { reply, sender, isGroup, mek, quotedMsg } = conText;
-    if (!isOwner(conText)) return reply("❌ Unauthorized.");
+    const { reply, react, sender, isGroup, mek, quotedMsg, args } = conText;
+    if (!isOwner(conText)) return react("❌");
 
     let target = null;
     if (mek.message.extendedTextMessage?.contextInfo?.participant) {
         target = mek.message.extendedTextMessage.contextInfo.participant;
-    } else if (conText.args[0]) {
-        target = conText.args[0].replace(/[^0-9]/g, '') + "@s.whatsapp.net";
+    } else if (args[0]) {
+        target = args[0].replace(/[^0-9]/g, '') + "@s.whatsapp.net";
     }
 
-    if (!target) return reply("❌ Reply to someone or provide a number to mark as foe.");
+    if (!target) return react("❔");
 
     const success = await setParticipant(target, 'foe', sender);
     if (success) {
-        reply(`🏁 Target @${target.split('@')[0]} is now marked as a *FOE*. Prepare for total demolition! 🔥`, { mentions: [target] });
+        react("😈");
     } else {
-        reply("❌ Failed to update records.");
+        react("❌");
     }
 });
 
@@ -118,23 +156,23 @@ bwmxmd({
     category: "campaign",
     filename: __filename
 }, async (from, client, conText) => {
-    const { reply, sender, isGroup, mek } = conText;
-    if (!isOwner(conText)) return reply("❌ Unauthorized.");
+    const { reply, react, sender, isGroup, mek, args } = conText;
+    if (!isOwner(conText)) return react("❌");
 
     let target = null;
     if (mek.message.extendedTextMessage?.contextInfo?.participant) {
         target = mek.message.extendedTextMessage.contextInfo.participant;
-    } else if (conText.args[0]) {
-        target = conText.args[0].replace(/[^0-9]/g, '') + "@s.whatsapp.net";
+    } else if (args[0]) {
+        target = args[0].replace(/[^0-9]/g, '') + "@s.whatsapp.net";
     }
 
-    if (!target) return reply("❌ Reply to someone or provide a number to mark as pal.");
+    if (!target) return react("❔");
 
     const success = await setParticipant(target, 'pal', sender);
     if (success) {
-        reply(`🤝 @${target.split('@')[0]} is now marked as a *PAL*. We've got their back! 🦅`, { mentions: [target] });
+        react("🤝");
     } else {
-        reply("❌ Failed to update records.");
+        react("❌");
     }
 });
 
@@ -149,16 +187,16 @@ bwmxmd({
     use: "<ispeed (msgs/mins)> [count]",
     filename: __filename
 }, async (from, client, conText) => {
-    const { reply, args, isGroup } = conText;
+    const { reply, react, args, isGroup } = conText;
 
-    if (!isOwner(conText)) return reply("❌ Unauthorized.");
+    if (!isOwner(conText)) return react("❌");
 
     const ispeed = args[0] || "3/5"; // Default 3 msgs per 5 mins
     const count = parseInt(args[1]) || 0; // Default 0 (infinite)
 
     const [msgs, mins] = ispeed.split('/').map(n => parseInt(n));
     if (isNaN(msgs) || isNaN(mins) || mins <= 0) {
-        return reply("❌ Invalid speed format. Use <msgs>/<mins>, e.g., 3/4");
+        return reply("formatting error; use <msgs>/<mins>, e.g., 3/4");
     }
 
     // Calculate interval in ms: (mins * 60 * 1000) / msgs
@@ -171,8 +209,7 @@ bwmxmd({
         ispeed: ispeed
     });
 
-    reply(`🚀 *Campaign Engine Engaged!*\n\n🎯 *Target:* Scoped Groups\n⚡ *Speed:* ${msgs} msgs every ${mins} mins (${interval}ms interval)\n🔢 *Bursts:* ${count === 0 ? 'Infinite' : count}\n\n_Distributing messages evenly to avoid spam flags._`);
-
+    react("🚀");
     startFlooding(client);
     startPromoLoop(client);
 });
@@ -183,8 +220,8 @@ bwmxmd({
     category: "campaign",
     filename: __filename
 }, async (from, client, conText) => {
-    const { reply } = conText;
-    if (!isOwner(conText)) return reply("❌ Unauthorized.");
+    const { reply, react } = conText;
+    if (!isOwner(conText)) return react("❌");
 
     await updateCampaignState({ is_flooding: false });
     if (floodInterval) {
@@ -195,7 +232,7 @@ bwmxmd({
         clearInterval(promoInterval);
         promoInterval = null;
     }
-    reply("🛑 Campaign bursts stopped.");
+    react("🛑");
 });
 
 async function startFlooding(client) {
@@ -565,17 +602,174 @@ bwmxmd({
     category: "campaign",
     filename: __filename
 }, async (from, client, conText) => {
-    const { reply, args } = conText;
-    if (!conText.isSuperUser) return reply("❌ Unauthorized.");
+    const { reply, react, args } = conText;
+    if (!conText.isSuperUser) return react("❌");
 
     const action = args[0]?.toLowerCase();
     if (action === 'on' || !action) {
         await updateCampaignState({ counter_mode: true });
-        reply("⚔️ *Counter Mode: ENGAGED!*\n🛡️ *Strategy:* Rapid response (2:1) to opponent media.\n\n_I am now monitoring foes for media attacks._");
+        react("⚔️");
     } else if (action === 'off') {
         await updateCampaignState({ counter_mode: false });
-        reply("🛡️ *Counter Mode: DISENGAGED.*");
+        react("🛡️");
     }
 });
 
 module.exports = { startFlooding, startPromoLoop, getCampaignSticker };
+// Media Management
+bwmxmd({
+    pattern: "addcim",
+    aliases: ["addcampaignimage", "savecim"],
+    description: "Save quoted image for campaign counter-attacks",
+    category: "campaign",
+    filename: __filename
+}, async (from, client, conText) => {
+    const { reply, react, quoted, isSuperUser } = conText;
+    const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+
+    if (!isSuperUser) return react("❌");
+    if (!quoted || !quoted.imageMessage) return reply("❌ Quote an image!");
+
+    try {
+        const stream = await downloadContentFromMessage(quoted.imageMessage, 'image');
+        let buffer = Buffer.from([]);
+        for await (const chunk of stream) {
+            buffer = Buffer.concat([buffer, chunk]);
+        }
+
+        const fileName = `cim_${Date.now()}.jpg`;
+        const filePath = path.join(__dirname, '../../assets/campaign/images', fileName);
+
+        fs.writeFileSync(filePath, buffer);
+        react("🖼️");
+    } catch (e) {
+        console.error(e);
+        react("❌");
+    }
+});
+
+bwmxmd({
+    pattern: "addcst",
+    aliases: ["addcampaignsticker", "savecst"],
+    description: "Save quoted sticker for campaign counter-attacks",
+    category: "campaign",
+    filename: __filename
+}, async (from, client, conText) => {
+    const { reply, react, quoted, isSuperUser } = conText;
+    const { downloadContentFromMessage } = require('@whiskeysockets/baileys');
+
+    if (!isSuperUser) return react("❌");
+    if (!quoted || !quoted.stickerMessage) return reply("❌ Quote a sticker!");
+
+    try {
+        const stream = await downloadContentFromMessage(quoted.stickerMessage, 'sticker');
+        let buffer = Buffer.from([]);
+        for await (const chunk of stream) {
+            buffer = Buffer.concat([buffer, chunk]);
+        }
+
+        const fileName = `cst_${Date.now()}.webp`;
+        const filePath = path.join(__dirname, '../../assets/campaign/stickers', fileName);
+
+        fs.writeFileSync(filePath, buffer);
+        react("🗒️");
+    } catch (e) {
+        console.error(e);
+        react("❌");
+    }
+});
+
+// --- Campaign Template Management ---
+
+bwmxmd({
+    pattern: "loadtemplate",
+    aliases: ["usetemplate"],
+    description: "Load a campaign template (chilux/aggressive/moderate/stealth/defensive)",
+    category: "campaign",
+    use: "<name>",
+    filename: __filename
+}, async (from, client, conText) => {
+    const { q, reply, isSuperUser, react } = conText;
+    if (!isSuperUser) return react("❌");
+
+    if (!q) {
+        const templates = await listTemplates();
+        let msg = "📋 *Available Templates:*\n\n";
+        for (const t of templates) {
+            msg += `*${t.name}*\n${t.description}\n\n`;
+        }
+        msg += "_Usage: .loadtemplate <name>_";
+        return reply(msg);
+    }
+
+    const config = await loadTemplate(q.toLowerCase());
+    if (!config) {
+        return reply(`❌ Template "${q}" not found.`);
+    }
+
+    await updateCampaignState(config);
+
+    if (config.is_flooding) {
+        if (typeof floodInterval !== 'undefined' && floodInterval) clearInterval(floodInterval);
+        if (typeof promoInterval !== 'undefined' && promoInterval) clearInterval(promoInterval);
+        startFlooding(client);
+        startPromoLoop(client);
+    } else {
+        if (typeof floodInterval !== 'undefined' && floodInterval) clearInterval(floodInterval);
+        if (typeof promoInterval !== 'undefined' && promoInterval) clearInterval(promoInterval);
+        floodInterval = null;
+        promoInterval = null;
+    }
+    
+    reply(`✅ *Template Loaded: ${q}*\n\nBanter: ${config.banter_level}\nSpeed: ${config.ispeed}\nFlooding: ${config.is_flooding ? 'ON' : 'OFF'}`);
+});
+
+bwmxmd({
+    pattern: "savetemplate",
+    description: "Save current campaign config as a template",
+    category: "campaign",
+    use: "<name>",
+    filename: __filename
+}, async (from, client, conText) => {
+    const { q, reply, isSuperUser, react } = conText;
+    if (!isSuperUser) return react("❌");
+
+    if (!q) return reply("❌ Provide a template name.\n\n_Usage: .savetemplate myconfig_");
+
+    const state = await getCampaignState();
+    const config = {
+        banter_level: state.banter_level,
+        counter_mode: state.counter_mode,
+        ispeed: state.ispeed,
+        sticker_count: state.sticker_count,
+        is_flooding: state.is_flooding,
+        interval_ms: state.interval_ms
+    };
+
+    const success = await saveTemplate(q.toLowerCase(), config, "Custom template");
+    if (success) {
+        reply(`✅ *Template Saved: ${q}*\n\nYou can load it anytime with:\n_.loadtemplate ${q}_`);
+    } else {
+        reply("❌ Failed to save template.");
+    }
+});
+
+bwmxmd({
+    pattern: "listtemplates",
+    description: "List all available campaign templates",
+    category: "campaign",
+    filename: __filename
+}, async (from, client, conText) => {
+    const { reply } = conText;
+    const templates = await listTemplates();
+    if (templates.length === 0) return reply("❌ No templates found.");
+
+    let msg = "📋 *Campaign Templates:*\n\n";
+    for (const t of templates) {
+        const cfg = t.config;
+        msg += `*${t.name.toUpperCase()}*\n`;
+        msg += `${t.description}\n`;
+        msg += `• Banter: ${cfg.banter_level} | Speed: ${cfg.ispeed}\n\n`;
+    }
+    reply(msg);
+});

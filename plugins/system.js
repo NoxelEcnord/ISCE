@@ -30,24 +30,12 @@ const convertToOpus = async (mp3Buffer) => {
   }
 };
 
-const fetchRandomNCS = async () => {
+const fetchCorazonSong = async () => {
   try {
-    const response = await axios.get(NCS_API, { timeout: 10000 });
-    if (response.data.status === 'success' && response.data.data && response.data.data[0]) {
-      const songData = response.data.data[0];
-      if (songData.links && songData.links.Bwm_stream_link) {
-        const audioResponse = await axios.get(songData.links.Bwm_stream_link, {
-          responseType: 'arraybuffer',
-          timeout: 30000
-        });
-        const mp3Buffer = Buffer.from(audioResponse.data);
-        songData.audioBuffer = await convertToOpus(mp3Buffer);
-      }
-      return songData;
-    }
-    return null;
-  } catch (err) {
-    console.error('NCS API error:', err.message);
+    const response = await axios.get(XMD.API.DOWNLOAD.AUDIO(XMD.THEME_SONG_URL), { timeout: 30000 });
+    return response.data?.result;
+  } catch (error) {
+    console.error("Error fetching Corazon song:", error.message);
     return null;
   }
 };
@@ -185,54 +173,41 @@ bwmxmd({
 bwmxmd({
   pattern: "ping",
   aliases: ["speed", "latency"],
-  description: "To check bot speed with NCS music",
+  description: "Check bot response time",
   category: "System",
   filename: __filename
 }, async (from, client, conText) => {
-  const { botname, author, sender, react, reply } = conText;
+  const { react, quoted, ms } = conText;
+  const start = performance.now();
 
-  try {
-    await react("🏓");
-    const startTime = now();
-    const pingSpeed = now() - startTime;
+  // Calculate speed first
+  const end = performance.now();
+  const speed = (end - start).toFixed(2);
 
-    const contactMessage = {
-      key: { fromMe: false, participant: "0@s.whatsapp.net", remoteJid: "status@broadcast" },
-      message: {
-        contactMessage: {
-          displayName: author,
-          vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;${author};;;;\nFN:${author}\nitem1.TEL;waid=${sender?.split('@')[0] ?? 'unknown'}:${sender?.split('@')[0] ?? 'unknown'}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
-        },
-      },
-    };
+  // React instead of text
+  react("🏓");
 
-    const pingText = `
-*╭──────────────┈❖*
-*│  『 🏓 ɪᴄᴇ ᴘɪɴɢ 』*
-*╰──────────────┈❖*
-*❯ ɪɴᴛᴇʟʟɪɢᴇɴᴛ sʏɴᴛʜᴇᴛɪᴄ ᴄᴏᴍᴘᴜᴛɪɴɢ ᴇɴᴛɪᴛʏ*
- 
-*⚡ sᴘᴇᴇᴅ:* ${pingSpeed.toFixed(4)} ms
-*🤖 ʙᴏᴛ:* ${botname}
-*📡 sᴛᴀᴛᴜs:* Online
-*🔥 ᴍᴏᴅᴇ:* Active
+  // Send Corazon song as PTT
+  const audioUrl = await fetchCorazonSong();
 
-*❯ ɪsᴄᴇ-ʙᴏᴛ ɪs ʙʟᴀᴢɪɴɢ ғᴀsᴛ!* 🚀`.trim();
-
-    await client.sendMessage(from, { text: pingText }, { quoted: contactMessage });
-
-    const ncsData = await fetchRandomNCS();
-    if (ncsData && ncsData.audioBuffer) {
-      await client.sendMessage(from, {
-        audio: ncsData.audioBuffer,
-        mimetype: 'audio/ogg; codecs=opus',
-        ptt: true
-      });
-    }
-
-  } catch (err) {
-    console.error("Ping error:", err);
-    reply("❌ Ping failed. Please try again.");
+  if (audioUrl) {
+    await client.sendMessage(from, {
+      audio: { url: audioUrl },
+      mimetype: 'audio/mpeg',
+      ptt: true,
+      contextInfo: {
+        externalAdReply: {
+          title: `⚡ 𝐈𝐒𝐂𝐄 𝐒𝐩𝐞𝐞𝐝: ${speed}𝐦𝐬`,
+          body: "𝐌𝐨𝐝𝐞: 𝐂𝐡𝐢𝐥𝐮𝐱 | 𝐏𝐫𝐞𝐦𝐢𝐮𝐦 🦅",
+          mediaType: 2,
+          thumbnailUrl: XMD.LOGO,
+          sourceUrl: XMD.REPO,
+          mediaUrl: XMD.REPO
+        }
+      }
+    }, { quoted: ms });
+  } else {
+    react("❌"); // Or minimal text
   }
 });
 
